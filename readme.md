@@ -1,11 +1,31 @@
 # 目录
 
-应用根目录： [www.peter-sia.top:8080](http://www.peter-sia.top:8080 "根目录")  
-网站主页&User Guide：[www.peter-sia.top/pinyin](http://www.peter-sia.top/pinyin/ "主页")  
-数据库： www.peter-sia.top:27017  
-技术文档: [www.peter-sia.top/pinyin/techDocs](http://www.peter-sia.top/pinyin/techDocs "技术文档")  
+>应用根目录： [www.peter-sia.top:8080](http://www.peter-sia.top:8080 "根目录")  
+>网站主页&User Guide：[www.peter-sia.top/pinyin](http://www.peter-sia.top/pinyin/ "主页")  
+>数据库： www.peter-sia.top:27017  
+>技术文档: [www.peter-sia.top/pinyin/docs](http://www.peter-sia.top/pinyin/docs "技术文档")  
+Github仓库: [github.com/PTYin/pinyin-learning](https://github.com/PTYin/pinyin-learning "Github")
 
-## 功能
+## Installation & Setup
+
+1. Install [Node.js](https://nodejs.org/) & [MongoDB](https://www.mongodb.org/) if you haven't already.
+2. Clone this repository and install its dependencies.
+
+        > git clone https://github.com/PTYin/pinyin-learning.git
+        > cd pinyin-learning
+        > npm install
+
+3. In a separate shell start MongoDB.
+
+        > mongod
+
+4. From within the pinyinlearning directory start the server.
+
+        > npm start
+
+5. Open a browser window and navigate to: [http://localhost:3000](http://localhost:3000)
+
+## Function
 
 * 学习版块
   * 汉字转换拼音
@@ -32,7 +52,7 @@
       * 未登录状态下利用cookie session将用户做题信息储存
       * 登录状态下利用数据库长期保存用户做题详细数据
 
-## 框架
+## Frame
 
 * 前端
   * html
@@ -49,7 +69,7 @@
 * 登录模块
   * braitsch/node-login  模板
 
-## 依赖
+## Dependency
 
 * 前端
   * jQuery UI(jQuery官方UI库)
@@ -58,32 +78,71 @@
 * 后端
   * express框架
   * body-parser(request body解析中间件; 用来解析post请求的body)
+  * morgan(日志中间件)
+  * file-stream-rotator(日志切割)
   * cookie-parser(cookie解析中间件)
   * express-session(用来创建session的中间件)
   * mongoDB(数据库)
   * connect-mongo(将session信息储存在数据库而中)
+  * emailjs(发送email的API)
   * pwxcoo/chinese-xinhua(共4个JSON，词典)
   * hotoo/pinyin(汉字转拼音)
   * braitsch/node-login 模板
 
-### 文件结构
+## File Structure
 
-* /homework/
-  * dictionary/
-    * 四个词典JSON文件
-  * image/(logo.png等一些图片)
-  * voice/(拼音音频)
-  * jquery-ui/
-  * node_modules/
-  * index.html
-  * index.js(nodejs服务器)
+* pinyin(根目录)
+  * .git
+  * .gitignore
+  * .vscode(vscode配置)
+  * app(应用核心)
+    * logs(日志文件夹)
+      * .gitignore
+    * public(公共静态资源)
+      * 1.swf
+      * 2.swf
+      * css
+      * dictionary(4个词典JSON文件)
+      * image
+      * jquery-ui(定制jQuery UI)
+      * js(前段需要的js模块化)
+        * controllers
+          * homeController.js
+          * loginController.js
+          * signupController.js
+        * form-validators
+          * accountValidator.js
+          * emailValidator.js
+          * loginValidator.js
+          * resetValidator.js
+        * views
+          * home.js
+          * login.js
+          * reset.js
+          * signup.js
+      * voice(音频文件)
+    * server(服务器端)
+      * modules
+        * account-manager.js(将用户的数据库操作抽象成一个对象)
+        * country-list.js(国家列表)
+        * email-dispatcher.js(用户找回密码，发送email的模块)
+      * **routes.js**(路由文件)
+      * views(pug模板)
+  * app.js(程序入口)
+  * docs(文档目录)
+  * index.html(根目录index.html)
+  * node_modules(依赖)
+  * package-lock.json
   * package.json
-  * pinyin.log(网站运行日志文件)
-  * start.sh(服务器linux开启脚本)
+  * README.md(README)
 
-## 特色&优势
+## Features&Advantages
 
-* 可拓展性
+* 易管理性
+  * 服务器防火墙开放27017端口，远程连接数据库
+  * 日志切割，周期每天切割一次，便于纠错
+  * 服务器端利用nodejs插件forever，保证服务器不轻易down
+* 可拓展性(TODO)
   * 题库存在数据库，想拓展题目不需更改源代码，只需远程连接数据库即可
   * 将session储存在数据库中而不是分散的文件中可以拓展以下功能
     * 控制一个帐号只能一个人登录
@@ -95,8 +154,10 @@
 * 易用性
   * 为用户提供说明书及联系方式
   * 网页结构简洁易上手
-  * 持久化统计，用户不小心关掉界面也可继续统计
+  * 持久化统计，用户关掉页面或者服务器宕机也不会导致数据丢失
 * 合理性
+  * 网站分为登录模式和非登录模式，功能有所差异但不影响基本功能
+  * 密码加密保存在数据库里,保护用户隐私
   * 目标群众：non-native Chinese learner. 全站英文
   * 中文转pinyin的同时，还提供查询中文意思的功能
-  * 提供的学习内容丰富
+  * 提供的学习内容丰富，提供功能丰富
