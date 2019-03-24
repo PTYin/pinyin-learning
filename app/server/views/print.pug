@@ -2,6 +2,14 @@
 extends layout
 
 block content
+	ul#navigationBar
+		li.navigation
+			a.active(href='/') Pinyin Club
+		li.navigation
+			a(href='http://www.peter-sia.top/pinyin', onclick="$('.active').removeClass('active');$(this).addClass('active');") User Guide
+		li.navigation
+			a(href='http://www.peter-sia.top', onclick="$('.active').removeClass('active');$(this).addClass('active');") Author
+
 	div.container(style='margin:20px auto')
 		table.table.table-bordered.table-striped
 			thead.thead-dark

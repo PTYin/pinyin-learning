@@ -18,6 +18,107 @@ MongoClient.connect(process.env.DB_URL, { useNewUrlParser: true }, function(e, c
 
 const guid = function(){return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});}
 
+
+exports.generateData = function(cookie, total, correct, wrongList, callback)
+{
+	accounts.findOneAndUpdate({cookie:cookie}, {$set:{
+		total : total,
+		correct : correct
+	}}, function(e, o){ 
+		if(e)console.log(e);
+		if(o)
+		{
+			var toSubmit = o.value.wrongList;
+			if(!o.value.wrongList)
+			{
+				accounts.updateOne({cookie:cookie},{$set:{wrongList:[]}});
+				toSubmit = [];
+			}
+			for(var index in wrongList)
+			{
+				var object = {"question":index};
+				var found = false;
+				var j;
+				for(j in toSubmit)
+				{
+					if(toSubmit[j].question==index)
+					{
+						found = true;
+						break;
+					}
+				}
+				if(!found)
+				{
+					object.count = 1;
+					toSubmit.push(object);
+				}
+				else
+				{
+					toSubmit[j].count++;
+				}
+				accounts.updateOne({cookie:cookie}, {$set:{wrongList:toSubmit}});
+			}
+		}
+		if(callback)
+		{
+			callback();
+		}
+	});
+};
+
+exports.findData = function(cookie, callback)
+{
+	accounts.findOne({cookie:cookie}, callback);
+};
+
+exports.dataSort = function(num, cookie, callback)
+{
+	accounts.findOne({cookie:cookie}, (e,o)=>
+	{
+		var toReturn = [];
+		if(o&&o.wrongList)
+		{
+			toReturn = o.wrongList;
+			toReturn.sort(function(a, b) 
+			{
+                var value1 = a.count;
+                var value2 = b.count;
+				return - value1 + value2;
+			});
+			toReturn = toReturn.slice(0,num);
+		}
+		callback(toReturn);
+	});
+};
+
+function findInList(list, target)
+{
+	for(var index in list)
+	{
+		if(target == list[index].question)
+		{
+			return list[index].count;
+		}
+	}
+	return 0;
+}
+
+exports.scoreList = function(list, user, callback)
+{
+	accounts.findOne({user:user}, (e,o)=>
+	{
+		var toReturn = [];
+		if(o&&o.wrongList)
+		{
+			for(var index in list)
+			{
+				toReturn.push(findInList(o.wrongList, list[index]));
+			}
+		}
+		callback(toReturn);
+	});
+};
+
 /*
 	login validation methods
 */

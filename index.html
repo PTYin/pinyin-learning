@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Learning Pinyin Now!!</title>
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+        <link rel="stylesheet" href="jquery-ui/jquery-ui.css">
+        <link rel="icon" href="image/logo.png">
+        <script src="jquery-ui/jquery-ui.js"></script>
+        <style>
+            body
+            {
+                background-color: #fadfb6;
+                background-image: url(image/logo.png)/*logo*/, url(image/background.png);
+                background-repeat: no-repeat, repeat;
+                background-attachment: fixed,fixed;
+                background-position: 95% -12.5%,0 0;
+                background-size: 20%, auto;
+            }
+            #navigationBar
+            {
+                list-style-type: none;
+                z-index: 1;
+                position: fixed;
+                width: 100%;
+                height:49px;
+                top:0;
+                left:0;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: rgb(121, 62, 62);
+                opacity: 0.8;
+                font-family: Microsoft YaHei;
+            }
+            .navigation
+            {
+                float: left;
+            }
+            .navigation.last
+            {
+                float: right;
+                width:10%;
+                margin-right: 2%;
+            }
+            .navigation a, .dropbtn
+            {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            .navigation a:hover:not(.active), .dropdown:hover:not(.active)
+            {
+                background-color: #111;
+            }
+            .active 
+            {
+                background-color: gold;
+            }
+            .dropdown 
+            {
+                width: 8%;
+                /* padding: 0;
+                margin:0;
+                right:0;
+                left:92%; */
+                float:right;
+            }
+
+            .dropdown-content {
+                display: none;
+                position: fixed;
+                background-color: #f9f9f9;
+                width: 15%;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            .dropdown-content a:hover {background-color: #f1f1f1}
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+            #cover
+            {
+                position: absolute;
+                left:0;
+                top:0;
+                margin: 0;
+                padding: 0;
+                width:100%;
+                height:100%;
+                background-image: url(image/logo.png)/*logo*/, url(image/cover.jpg);
+                background-repeat: no-repeat, no-repeat;
+                background-attachment: fixed,fixed;
+                background-position: 0 0,0 0;
+                background-size: 20%, 100%;
+            }
+            #title
+            {
+                text-align: center;
+                font-size: 110px;
+                color: #0042a5ab;
+                font: bold;
+                margin-top: 15%;
+                margin-bottom: 50px;
+            }
+            #info
+            {
+                text-align: center;
+                color:snow;
+                margin-bottom: 20px;
+            }
+            #start
+            {
+                clear: both;
+                text-align: center;
+            }
+            button
+            {
+                outline:0 none;
+            }
+            #start button
+            {
+                width: 160px;
+                height:60px;
+                background-color: #22b3a4; /* Green */
+                border: 2px solid #22b3a4;
+                border-radius: 30px;
+                color: whitesmoke;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration:none;
+                font-size: 24px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+            #start button:hover 
+            {
+                background-color: transparent;
+                border-color: #ccc;
+                color: grey;
+            }
+            
+            #content
+            {
+                font-family: "Trebuchet MS", sans-serif;
+                margin: 50px;
+            }
+            #content-title
+            {
+                font-family: Arial;
+                font-size: 35px;
+                color: transparent;
+                background-color : black;
+                text-shadow : rgba(255,255,255,0.5) 0 5px 6px, rgba(255,255,255,0.2) 1px 3px 3px;
+                -webkit-background-clip : text;
+            }
+            #dialog-link, #shuffle, #moreData
+            {
+                padding: .4em 1em .4em 20px;
+                text-decoration: none;
+                position: relative;
+            }
+            button span.ui-icon 
+            {
+                margin: 10px 5px 0 0;
+                position: absolute;
+                left: .2em;
+                top: 50%;
+                margin-top: -8px;
+            }
+            #main
+            {
+                float: left;
+                width: 70%;
+            }
+            #accordion div
+            {
+                height:150px;
+            }
+            #video
+            {
+                /* margin-top: 5em; */
+                text-align: center;
+                /* width: 30%; */
+            }
+            #video div h2
+            {
+                text-align: center;
+                font-size: 30px;
+                color: #fafafa;
+                letter-spacing: 0;
+                text-shadow: 0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 6px 0px #444, 0px 7px 0px #333, 0px 8px 7px #001135;
+            }
+            #left
+            {
+                float: left;
+                width: 50%;
+            }
+            #right
+            {
+                float: left;
+                width: 50%;
+            }
+            p#description
+            {
+                text-indent: 1.2em;
+            }
+            input
+            {
+                margin-right: 2em;
+            }
+            p#display
+            {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            button#button
+            {
+                font-size: 15px;
+            }
+            form
+            {
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+            }
+            .quizz
+            {
+                margin-top: 1.2em;
+            }
+            /* li+ol
+            {
+                margin-left: 10px;
+            } */
+            .question
+            {
+                margin-left: 1.2em;
+                margin-bottom: 0.3em;
+            }
+            /* input[type="radio"]
+            {
+                padding-right: 10em
+            } */
+            #data
+            {
+                float: right;
+                width: 25%;
+                height: 600px;
+                margin-right: 1em;
+                /* margin: 0 0 0 70%; */
+            }
+            #statics
+            {
+                text-align: center;
+            }
+            table, td, th
+            {
+                border:1px solid orange;
+            }
+            th
+            {
+                background-color:orange;
+                color:white;
+            }
+            #tabs-3
+            {
+                height: 500px;
+            }
+            #tabs-4
+            {
+                text-align: center;
+            }
+            #gallery
+            {
+                position: relative;
+                clear: left;
+                text-align: center;
+                align-content: center;
+                top: 3em;
+            }
+            div.img {
+                border: 1px solid #ccc;
+                float: left;
+                margin: 15px;
+                -webkit-transition: margin 0.5s ease-out;
+                -moz-transition: margin 0.5s ease-out;
+                -o-transition: margin 0.5s ease-out;
+            }
+
+            div.img:hover {
+                border: 1px solid #777;
+                margin-top: 2px;
+            }
+
+            div.img img {
+                width: 100%;
+                height: auto;
+            }
+
+            div.desc {
+                padding: 15px;
+                text-align: center;
+            }
+
+            #gallery * {
+                box-sizing: border-box;
+            }
+
+            .responsive {
+                padding: 0 6px;
+                float: left;
+                width: 25%;
+            }
+
+            @media only screen and (max-width: 700px){
+                .responsive {
+                    width: 50%;
+                    margin: 6px 0;
+                }
+            }
+
+            @media only screen and (max-width: 500px){
+                .responsive {
+                    width: 100%;
+                }
+            }
+
+            .clearfix:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+        </style>
+    </head>
+    <body>
+        <ul id="navigationBar">
+            <li class="navigation"><a class="active" href="/">Pinyin Club</a></li>
+            <li class="navigation"><a href="http://www.peter-sia.top/pinyin" onclick="$('.active').removeClass('active');$(this).addClass('active');">User Guide</a></li>
+            <li class="navigation"><a href="http://www.peter-sia.top" onclick="$('.active').removeClass('active');$(this).addClass('active');">Author</a></li>
+            <li class="navigation last"><a href="http://www.peter-sia.top" onclick="$('.active').removeClass('active');$(this).addClass('active');"><span class="ui-icon ui-icon-search"></span>Help</a></li>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">User</a>
+                <div class="dropdown-content">
+                    <a href="login"><span class="ui-icon ui-icon-locked"></span>Login</a>
+                    <a href="signup"><span class="ui-icon ui-icon-person"></span>Register</a>
+                    <a href="home"><span class="ui-icon ui-icon-home"></span>Panel</a>
+                    <a href="logout"><span class="ui-icon ui-icon-unlocked"></span>Logout</a>
+                </div>
+            </div>
+        </ul>
+        <div id="cover">
+            <div id="title" hidden="hidden">Learn. Test. Master.</div>
+            <p id="info">Read user guide before starting.</p>
+            <div id="start" hidden="hidden"><button>Start</button></div>
+            <!--test-->
+            <!-- <button id="login">login</button>
+            <button id="register">register</button>
+            <script>
+            $("#login").click(() =>
+            {
+                $.ajax(
+                    {
+                        url:"login",
+                        dataType:"json",
+                        async:true,
+                        type:'get',
+                        data:{username:"ptyin",password:"lalala"},
+                        success:(data)=>
+                        {
+                            console.log(data);
+                        }
+                    }
+                );
+            });
+            $("#register").click(() =>
+            {
+                $.ajax(
+                    {
+                        url:"register",
+                        dataType:"json",
+                        async:true,
+                        type:'get',
+                        data:{username:"ptyin",password:"lalala",passwordSec:"lalala"},
+                        success:(data)=>
+                        {
+                            console.log(data);
+                        }
+                    }
+                );
+            });
+            </script> -->
+            <!---->
+            <div id="reminder" hidden="hidden">
+                    <div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;">
+                        <p>
+                            <span class="ui-icon ui-icon-note" style="float: left; margin-right: .3em;"></span>
+                            Have you already read the user guide?
+                        </p>
+                    </div>
+            </div>
+        </div>
+        <div id="app" hidden="hidden">
+            <div id="content">
+                <div class="ui-widget">
+                    <h1 id="content-title">Welcome to PTY's pinyin learning club!</h1>
+                    <p id="description">Dear Fellas, The first step to learning Mandarin is to learn pinyin, Let's start!</p>
+                </div>
+                <div id="main">
+                    <div id="tabs">
+                        <ul>
+                            <li><a href="#tabs-1">Learn</a></li>
+                            <li><a href="#tabs-2">Test</a></li>
+                            <li><a href="#tabs-3">More About Me</a></li>
+                            <li><a href="#tabs-4">Pinyin Table</a></li>
+                            <li><a href="#tabs-5">Online Chinese Dictionary</a></li>
+                        </ul>
+                        <div id="tabs-1">
+                            <input id="pinyinConverter" class="ui-corner-all" style="font-family: FZShuTi" type="text">
+                            <button id="button" class="ui-button ui-corner-all ui-widget">Submit</button>
+                            <div>
+                                <div id="left">
+                                        <p id="display"></p>
+                                </div>
+                                <div id="right">
+                                    <button id="audio" class="ui-button-icon-only">Play It!</button>
+                                    <audio id="player" src=""></audio>
+                                </div>
+                            </div>
+
+                            <div>
+                            <button id="dialog-link" class="ui-button ui-corner-all ui-widget">
+                                <span class="ui-icon ui-icon-newwin"></span>Check More
+                            </button>
+                            </div>
+                            <div id="dialog" title="Check More">
+                                <div id="accordion">
+                                    <h3 id="title0"></h3>
+                                    <div id="description0"><br><br><br>Waiting...<br><br><br></div>
+                                    <h3 id="title1"></h3>
+                                    <div id="description1"><br><br><br>Waiting...<br><br><br></div>
+                                    <h3 id="title2"></h3>
+                                    <div id="description2"><br><br><br>Waiting...<br><br><br></div>
+                                    <h3 id="title3"></h3>
+                                    <div id="description3"><br><br><br>Waiting...<br><br><br></div>
+                                    <h3 id="title4"></h3>
+                                    <div id="description4"><br><br><br>Waiting...<br><br><br></div>
+                                    <h3 id="title5"></h3>
+                                    <div id="description5"><br><br><br>Waiting...<br><br><br></div>
+                                    <h3 id="title6"></h3>
+                                    <div id="description6"><br><br><br>Waiting...<br><br><br></div>
+                                </div>
+                            </div>
+                            <!-- <iframe src="http://open.iqiyi.com/developer/player_js/coopPlayerIndex.html?vid=77a4ba9809e102a2148796a15c4d964c&tvId=485218900&sign=2c2b428709b613a48425847a62f0dfbc17545dd569d1bfaf09cdad939321e65b&appKey=3955c3425820435e86d0f4cdfe56f5e7&appId=1368&height=100%&width=100%" frameborder="0" width="100%" height="100%" allowfullscreen="true"></iframe> -->
+                            <div id="video">
+                                <div class="ui-widget ui-font">
+                                    <h2>Watch The Video Clip</h2>
+                                </div>
+                                <iframe src="//player.bilibili.com/player.html?aid=37467932&cid=65863054&page=1" scrolling="false" border="0" frameborder="0" framespacing="0" width="100%" height="500px" allowfullscreen="true"> </iframe>    
+                            </div>
+                            
+                        </div>
+                        <div id="tabs-2">
+                            <button id="shuffle" class="ui-button ui-corner-all ui-widget"><span class="ui-icon ui-icon-refresh"></span>
+                                Shuffle
+                            </button>
+                            <form>
+                                <ol id="quizz">
+                                    <fieldset>
+                                        <li class="question" id="question0">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio00" class="A" name="radio0" value="A"><label for="radio00">Choice 1</label>
+                                        <input type="radio" id="radio01" class="B" name="radio0" value="B"><label for="radio01">Choice 2</label>
+                                        <input type="radio" id="radio02" class="C" name="radio0" value="C"><label for="radio02">Choice 3</label>
+                                        <input type="radio" id="radio03" class="D" name="radio0" value="D"><label for="radio03">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question1">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio10" class="A" name="radio1" value="A"><label for="radio10">Choice 1</label>
+                                        <input type="radio" id="radio11" class="B" name="radio1" value="B"><label for="radio11">Choice 2</label>
+                                        <input type="radio" id="radio12" class="C" name="radio1" value="C"><label for="radio12">Choice 3</label>
+                                        <input type="radio" id="radio13" class="D" name="radio1" value="D"><label for="radio13">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question2">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio20" class="A" name="radio2" value="A"><label for="radio20">Choice 1</label>
+                                        <input type="radio" id="radio21" class="B" name="radio2" value="B"><label for="radio21">Choice 2</label>
+                                        <input type="radio" id="radio22" class="C" name="radio2" value="C"><label for="radio22">Choice 3</label>
+                                        <input type="radio" id="radio23" class="D" name="radio2" value="D"><label for="radio23">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question3">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio30" class="A" name="radio3" value="A"><label for="radio30">Choice 1</label>
+                                        <input type="radio" id="radio31" class="B" name="radio3" value="B"><label for="radio31">Choice 2</label>
+                                        <input type="radio" id="radio32" class="C" name="radio3" value="C"><label for="radio32">Choice 3</label>
+                                        <input type="radio" id="radio33" class="D" name="radio3" value="D"><label for="radio33">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question4">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio40" class="A" name="radio4" value="A"><label for="radio40">Choice 1</label>
+                                        <input type="radio" id="radio41" class="B" name="radio4" value="B"><label for="radio41">Choice 2</label>
+                                        <input type="radio" id="radio42" class="C" name="radio4" value="C"><label for="radio42">Choice 3</label>
+                                        <input type="radio" id="radio43" class="D" name="radio4" value="D"><label for="radio43">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question5">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio50" class="A" name="radio5" value="A"><label for="radio50">Choice 1</label>
+                                        <input type="radio" id="radio51" class="B" name="radio5" value="B"><label for="radio51">Choice 2</label>
+                                        <input type="radio" id="radio52" class="C" name="radio5" value="C"><label for="radio52">Choice 3</label>
+                                        <input type="radio" id="radio53" class="D" name="radio5" value="D"><label for="radio53">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question6">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio60" class="A" name="radio6" value="A"><label for="radio60">Choice 1</label>
+                                        <input type="radio" id="radio61" class="B" name="radio6" value="B"><label for="radio61">Choice 2</label>
+                                        <input type="radio" id="radio62" class="C" name="radio6" value="C"><label for="radio62">Choice 3</label>
+                                        <input type="radio" id="radio63" class="D" name="radio6" value="D"><label for="radio63">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question7">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio70" class="A" name="radio7" value="A"><label for="radio70">Choice 1</label>
+                                        <input type="radio" id="radio71" class="B" name="radio7" value="B"><label for="radio71">Choice 2</label>
+                                        <input type="radio" id="radio72" class="C" name="radio7" value="C"><label for="radio72">Choice 3</label>
+                                        <input type="radio" id="radio73" class="D" name="radio7" value="D"><label for="radio73">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question8">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio80" class="A" name="radio8" value="A"><label for="radio80">Choice 1</label>
+                                        <input type="radio" id="radio81" class="B" name="radio8" value="B"><label for="radio81">Choice 2</label>
+                                        <input type="radio" id="radio82" class="C" name="radio8" value="C"><label for="radio82">Choice 3</label>
+                                        <input type="radio" id="radio83" class="D" name="radio8" value="D"><label for="radio83">Choice 4</label>
+                                    </fieldset>
+                                    <fieldset>
+                                        <li class="question" id="question9">lalalalalalalalalalalalalalalala</li>
+                                        <input type="radio" id="radio90" class="A" name="radio9" value="A"><label for="radio90">Choice 1</label>
+                                        <input type="radio" id="radio91" class="B" name="radio9" value="B"><label for="radio91">Choice 2</label>
+                                        <input type="radio" id="radio92" class="C" name="radio9" value="C"><label for="radio92">Choice 3</label>
+                                        <input type="radio" id="radio93" class="D" name="radio9" value="D"><label for="radio93">Choice 4</label>
+                                    </fieldset>
+                                </ol>
+                                <div>
+                                    <button id="submitAnswer" type="button" class="ui-widget ui-button ui-corner-all">Submit</button>
+                                </div>
+                            </form>
+                            <div id="popUp">
+                                    <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+                                        <p>
+                                            <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+                                            <table id="wrongList">
+                                            </table>
+                                        </p>
+                                    </div>
+                            </div>
+                        </div>
+                        <div id="tabs-3">
+                                <button id="moreData" class="ui-button ui-corner-all ui-widget"><span class="ui-icon ui-icon-zoomin"></span>
+                                    Submit
+                                </button>
+                                <canvas id="barChart"></canvas>
+                        </div>
+                        <div id="tabs-4">
+                            <embed src="2.swf" id="flashgame" name="flashgame" quality="high" base="." allownetworking="internal" allowscriptaccess="always" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Pro d_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="540" height="500" style="margin: 0px auto;">
+                        </div>
+                        <div id="tabs-5">
+                            <iframe src="https://www.mdbg.net/chinese/dictionary" width="100%" height="800px"></iframe>
+                        </div>
+                    </div>
+                </div>
+                <!--right(statistics part)-->
+                <div id="data" class="ui-widget ui-widget-content ui-corner-all">
+                    <h2 id="statics">Statics</h2>
+                    <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+                        <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+                        <strong>Hey!</strong>  Check your performance before closing this page!</p>
+                    </div>
+                    <ul>
+                        <li><strong>Total: </strong><span id="total">0</span></li>
+                        <li><strong>Wrong: </strong><span id="wrong">0</span></li>
+                        <li><strong>Correct: </strong><span id="correct">0</span></li>
+                    </ul>
+                    <div id="chart">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+
+                <div id="gallery">
+                    <h2>More Resources</h2>
+                    <div class="responsive">
+                        <div class="img">
+                        <a target="_blank" href="http://du.hanyupinyin.cn/">
+                            <img src="https://images.pexels.com/photos/301920/pexels-photo-301920.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="图片文本描述" width="300" height="200">
+                        </a>
+                        <div class="desc">du.hanyupinyin.cn</div>
+                        </div>
+                    </div>
+                    
+                    <div class="responsive">
+                        <div class="img">
+                        <a target="_blank" href="http://english.hanban.org/">
+                            <img src="https://images.pexels.com/photos/7096/people-woman-coffee-meeting.jpg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="图片文本描述" width="300" height="200">
+                        </a>
+                        <div class="desc">Confucius Institute</div>
+                        </div>
+                    </div>
+                    
+                    <div class="responsive">
+                        <div class="img">
+                        <a target="_blank" href="https://www.chinese-dictionary.org/">
+                            <img src="https://images.pexels.com/photos/1166657/pexels-photo-1166657.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="图片文本描述" width="300" height="200">
+                        </a>
+                        <div class="desc">Chinese Dictionary</div>
+                        </div>
+                    </div>
+                    
+                    <div class="responsive">
+                        <div class="img">
+                        <a target="_blank" href="https://chinese.yabla.com/chinese-english-pinyin-dictionary.php">
+                            <img src="https://images.pexels.com/photos/1925536/pexels-photo-1925536.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="图片文本描述" width="300" height="200">
+                        </a>
+                        <div class="desc">Chinese Pinyin Dictionary</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(() => 
+            {
+                // setTimeout(() => $("#app").show(),1000);
+                setTimeout(() => $("#title").show("slide",{direction: 'right'},500), 200);
+                setTimeout(() => $("#start").show("slide",{direction: 'left'}, 500), 600);
+                $("#start button").click(() =>
+                {
+                    $("#reminder").dialog("open");
+                });
+                $( "#reminder" ).dialog(
+                {
+                    autoOpen: false,
+                    width: 400,
+                    height:200,
+                    show: {
+                    effect: "easing",
+                    duration: 1000
+                    },
+                    hide: {
+                    effect: "easing",
+                    duration: 1000
+                    },
+                    buttons: [
+                        {
+                            text: "Yes",
+                            click: function() 
+                            {
+                                $("#cover").hide("fade");
+                                setTimeout(()=>$("#app").show("blind",{direction:"up"},()=>$("#reminder").dialog("close")));
+                            }
+                        },
+                        {
+                            text: "Check It Now",
+                            click: function() 
+                            {
+                                window.location.href = "//www.peter-sia.top/pinyin/";
+                            }
+                        }]
+                });
+                $( "#dialog" ).dialog(
+                {
+                    autoOpen: false,
+                    width: 400,
+                    height:400,
+                    show: {
+                    effect: "slide",
+                    duration: 1000
+                    },
+                    hide: {
+                    effect: "fold",
+                    duration: 1000
+                    },
+                    buttons: [
+                        {
+                            text: "Ok",
+                            click: function() 
+                            {
+                                $( this ).dialog( "close" );
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            click: function() 
+                            {
+                                $( this ).dialog( "close" );
+                            }
+                        }]
+                });
+            });
+            // Link to open the dialog
+            $( "#dialog-link" ).click(function( event )
+            {
+                $( "#dialog" ).dialog("open");
+                event.preventDefault();
+            });
+            $( "#dialog-link" ).hover(
+                function() 
+                {
+                    $( this ).addClass( "ui-state-hover" );
+                },
+                function() 
+                {
+                    $( this ).removeClass( "ui-state-hover" );
+                }
+            );
+            $( "#audio" ).button(
+            {
+                icon: "ui-icon-play",
+                showLabel: false
+            });
+            $("#accordion").accordion();
+            $("#tabs").tabs();
+            var audioQueue = [];
+            var pointer;
+            var audio = document.getElementById('player');
+            audio.addEventListener('ended', () => 
+            {
+                if(pointer < audioQueue.length)
+                {
+                    audio.src = "voice/"+audioQueue[pointer]+".mp3";
+                    pointer++;
+                    audio.playbackRate = 2.0;
+                    audio.currentTime = 0.1;
+                    audio.play();
+                }
+                else
+                {
+                    pointer = 0;
+                }
+            });
+            function play()
+            {
+                pointer = 0;
+                if(pointer < audioQueue.length)
+                {
+                    audio.src = "voice/"+audioQueue[pointer]+".mp3";
+                    pointer++;
+                    audio.playbackRate = 2.0;
+                    audio.currentTime = 0.1;
+                    audio.play();
+                }
+            }
+            $("#audio").click(play);
+            $(".ui-button").button();
+            $( "#quizz" ).buttonset();
+            $("input[type='radio']").checkboxradio();
+            $( "#popUp" ).dialog(
+            {
+                autoOpen: false,
+                show: {
+                effect: "blind",
+                duration: 1000
+                },
+                hide: {
+                effect: "explode",
+                duration: 1000
+                }
+            });
+            var json;
+            function shuffle()
+            {
+                $("label.ui-checkboxradio-label").removeClass("ui-checkboxradio-checked");
+                $("label.ui-checkboxradio-label").removeClass("ui-state-active");
+                $.ajax(
+                {
+                    url:"shuffle",
+                    dataType: "json",
+                    async: true,
+                    type:'get',
+                    success: (data) =>
+                    {
+                        json = data;
+                        qGenerator(json['questions'],json['As'],json['Bs'],json['Cs'],json['Ds']);
+                    }
+                });
+            }
+            $("#shuffle").click(shuffle);
+            $("#moreData").click(()=>
+            {
+                $.ajax(
+                {
+                    url:"moreData",
+                    type:"get",
+                    async:true,
+                    dataType:"json",
+                    success: (data) =>
+                    {   
+                        var questions = [];
+                        for(var index in data)
+                        {
+                            questions.push(data[index].question);
+                            myBarChart.data.labels[index]=data[index].question;
+                            myBarChart.data.datasets[0].data[index]=data[index].count;
+                        }
+
+                        myBarChart.update();
+                        $.ajax(
+                        {
+                            url:"moreDataAboutPeter",
+                            type:"get",
+                            async:true,
+                            data:{'list':questions},
+                            dataType:"json",
+                            success: (data) =>
+                            {
+                                console.log(myBarChart.data.datasets[0].data);
+                                myBarChart.data.datasets[1].data=data;
+                                myBarChart.update();
+                            }
+                        });
+                    }
+                });
+            });
+            function qGenerator(question, a, b, c, d)
+            {
+                // var string = "";
+                $("input[type='radio']").removeAttr("checked");
+                $("input[type='radio']").removeAttr("selected");
+                for(var index in question)
+                {
+                    // string += "<li class=\"question\"><strong>"+question[index]+"</strong></li><ol type=\"A\"><li class=\"A\">"+a[index]+"</li><li class=\"B\">"+b[index]+"</li><li class=\"C\">"+c[index]+"</li><li class=\"D\">"+d[index]+"</li></ol>";
+                    $("#question"+index).html(question[index]);
+                    $("#radio"+index+"0").next("label").html(a[index]);
+                    $("#radio"+index+"1").next("label").html(b[index]);
+                    $("#radio"+index+"2").next("label").html(c[index]);
+                    $("#radio"+index+"3").next("label").html(d[index]);
+                }
+                // $("#quizz").html(string);
+            }
+            function getSession()
+            {
+                $.ajax(
+                {
+                    type : "get",
+                    url : "getSession",
+                    dataType : "json",
+                    success : function(result) 
+                    {
+                        $("#total").html(result.total);
+                        $("#correct").html(result.correct);
+                        $("#wrong").html(result.wrong);
+                        myPieChart.data.datasets[0].data[0] = result.correct;
+                        myPieChart.data.datasets[0].data[1] = result.wrong;
+                        myPieChart.update();
+                    }
+                });
+            }
+            $("#submitAnswer").click(() =>
+            {
+                var list = $("form").serializeArray();
+                for(var index in list)
+                {
+                    // console.log("#question"+list[index].name[5]);
+                    list[index].name = $("#question"+list[index].name[5]).html();
+                }
+                // $("input[type='radio']").animate({backgroundColor: "rgb(144,238,144)"});
+                // $("#quizz fieldset").css("background-color","transparent");
+                // console.log(list);
+                $.ajax(
+                {
+                    url:"submitAnswer",
+                    dataType: "json",
+                    async: true,
+                    type:'post',
+                    data:list,
+                    success: (data) =>
+                    {
+                        var json = data;
+                        var str = "";
+                        //<strong></strong>
+                        $("#wrongList").html("<tr><th>Question</th><th>Right Answer</th><th>pinyin</th></tr>")
+                        for(var key in json.wrongList)
+                        {
+                            str += "<tr><td>"+key+"</td>";
+                            str += "<td>"+json.wrongList[key][0]+"</td>";
+                            str += "<td>"+json.wrongList[key][1]+"</td></tr>"
+                        }
+                        $("#wrongList").append(str);
+                        $("#popUp").dialog("open");
+                        getSession();
+                        shuffle();
+                    }
+                });
+            });
+            // $(document).ready(()=>
+            // {
+            //     total = 0;
+            //     correct = 0;
+            //     wrong = 0;
+            // })
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var myPieChart = new Chart(ctx,
+            {
+                type: 'pie',
+                data: 
+                {
+                    labels: ["Correct", "Wrong"],
+                    datasets:[
+                    {
+                        label: "Statics",
+                        // data: [parseInt($.session.get('total'))-parseInt($.session.get('right')),parseInt($.session.get('right'))],
+                        data: [0,0],
+                        backgroundColor:['rgba(75, 192, 192, 0.2)','rgba(255, 99, 132, 0.2)'],
+                        borderColor:['rgba(75, 192, 192, 1)','rgba(255,99,132,1)'],
+                        borderWidth:1
+                    }]
+                }
+            });
+            ctx = document.getElementById("barChart").getContext('2d');
+            var myBarChart = new Chart(ctx,
+            {
+                type: 'bar',
+                data:
+                {
+                    labels: ["***", "***", "***", "***", "***", "***", "***"],
+                    datasets: [
+                        {
+                            label: "Mine",
+                            backgroundColor:'rgba(187, 255, 255, 0.8)',
+                            borderColor:'rgba(75, 192, 192, 1)',
+                            data: [0, 0, 0, 0, 0, 0, 0]
+                        },
+                        {
+                            label: "Peter's",
+                            backgroundColor:'rgba(255, 106, 106, 0.8)',
+                            borderColor:'rgba(255,99,132,1)',
+                            data: [0, 0, 0, 0, 0, 0, 0]
+                        }
+                    ]
+                },
+                options:
+                {
+                    scales: 
+                    {
+                        yAxes: 
+                        [{
+                            display: true,
+                            ticks: 
+                            {
+                                beginAtZero: true 
+                            }
+                        }]
+                    }
+                }
+            });
+            getSession();
+            function update(correct, wrong)
+            {
+                
+                // $("#total").html(parseInt($("#total").html())+10);
+                // $("#correct").html(parseInt($("#correct").html())+correct);
+                // $("#wrong").html(parseInt($("#wrong").html())+10-correct);
+                // myPieChart.data.datasets[0].data[0] += correct;
+                // myPieChart.data.datasets[0].data[1] += wrong;
+                // console.log($.session.get('total'));
+                // $("#total").html($.session.get('total'));
+                // $("#correct").html($.session.get('right'));
+                // $("#wrong").html(parseInt($.session.get('total'))-parseInt($.session.get('right')));
+                // myPieChart.data.datasets[0].data[0] += correct;
+                // myPieChart.data.datasets[0].data[1] += wrong;
+                // myPieChart.update();
+            }
+            $(document).ready(function()
+            {
+                for(var i=0;i<10;i++)
+                    for(var j=0;j<4;j++)
+                    {
+                        // console.log($("#radio"+i+j).prev(".question").html());
+                        $(("#radio"+i)+j).click((e) =>
+                        {
+                            $.ajax(
+                            {
+                                url: "lookUp",
+                                dataType:'json',
+                                async:true,
+                                type:'get',
+                                data:{'txt':$("#question"+e.target.id[5]).html()},
+                                success: function(data)
+                                {
+                                    data = JSON.parse(data);
+                                    audioQueue = [];
+                                    for(var index in data.audio)
+                                        for(var j in data.audio[index])
+                                            audioQueue.push(data.audio[index][j]);
+                                    play();
+                                }
+                            });
+                        });
+                    }
+                shuffle();
+                $("#button").click(() =>
+                {
+                    var string = $("#pinyinConverter").val();
+                    $("#display").html("");
+                    $.ajax(
+                    {
+                        url: "lookUp",
+                        dataType:'json',
+                        async:true,
+                        type:'get',
+                        data:{'txt':string},
+                        success: function(data)
+                        {
+                            data = JSON.parse(data);
+                            for(var index in data.pinyin)
+                            {
+                                $("#display").append(" "+data.pinyin[index][0]);
+                            }
+                            audioQueue = [];
+                            for(var index in data.audio)
+                                for(var j in data.audio[index])
+                                    audioQueue.push(data.audio[index][j]);
+                        }
+                    });
+                    if(string.length<10)
+                        $.ajax(
+                        {
+                            url: "checkMore",
+                            dataType: "json",
+                            async:true,
+                            type:'get',
+                            data:{'txt':string},
+                            success: function(data)
+                            {
+                                var json = eval(data);
+                                var titles = new Array();
+                                var description = new Array();
+                                for(var key in json)
+                                {
+                                    titles.push(key);
+                                    description.push(json[key]);
+                                }
+                                // var string = "";
+                                // for(var i=0;i<titles.length;i++)
+                                // {
+                                //     string += "<h3>"+titles[i]+"</h3>";
+                                //     string += "<div>"+description[i]+"</div>";
+                                // }
+                                // $("accordion").html(string);
+                                for(var i=0;i<titles.length;i++)
+                                {
+                                    $("#title"+i).html(titles[i]);
+                                    $("#description"+i).html(description[i]);
+                                }
+                            },
+                            error: function()
+                            {
+                                for(var i=0;i<titles.length;i++)
+                                {
+                                    $("#title"+i).html();
+                                    $("#description"+i).html("<br><br><br>Waiting...<br><br><br>");
+                                }
+                            }
+                        })
+                });
+            });
+        </script>
+    </body>
+</html>
