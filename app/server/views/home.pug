@@ -8,6 +8,8 @@ block content
 		.navbar-nav.ml-auto
 			.nav-item
 				button.btn.navbar-btn.btn-outline-dark#btn-logout Sign Out
+			.nav-item
+				button.btn.navbar-btn.btn-outline-dark(onclick="window.location.href='/'") Home
 
 	include account
 	include modals/alert
@@ -17,3 +19,4 @@ block scripts
 	script(src='/js/views/home.js')
 	script(src='/js/controllers/homeController.js')
 	script(src='/js/form-validators/accountValidator.js')
+	document.get

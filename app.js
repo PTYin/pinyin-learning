@@ -1,10 +1,4 @@
 
-/**
-	* Node.js Login Boilerplate
-	* More Info : https://github.com/braitsch/node-login
-	* Copyright (c) 2013-2018 Stephen Braitsch
-**/
-
 var http = require('http');
 var express = require('express');
 var session = require('express-session');
@@ -15,7 +9,7 @@ var MongoStore = require('connect-mongo')(session);
 var app = express();
 
 app.locals.pretty = true;
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8080);
 app.set('views', __dirname + '/app/server/views');
 app.set('view engine', 'pug');
 app.use(cookieParser());
@@ -28,7 +22,7 @@ app.use(express.static(__dirname + '/app/public'));
 
 process.env.DB_HOST = process.env.DB_HOST || 'localhost'
 process.env.DB_PORT = process.env.DB_PORT || 27017;
-process.env.DB_NAME = process.env.DB_NAME || 'node-login';
+process.env.DB_NAME = process.env.DB_NAME || 'users';
 
 if (app.get('env') != 'live'){
 	process.env.DB_URL = 'mongodb://'+process.env.DB_HOST+':'+process.env.DB_PORT;
