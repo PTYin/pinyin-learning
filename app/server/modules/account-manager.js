@@ -26,7 +26,7 @@ exports.generateData = function(cookie, total, correct, wrongList, callback)
 		correct : correct
 	}}, function(e, o){ 
 		if(e)console.log(e);
-		if(o)
+		if(o&&o.value)
 		{
 			var toSubmit = o.value.wrongList;
 			if(!o.value.wrongList)
