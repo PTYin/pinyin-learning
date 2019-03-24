@@ -23,11 +23,8 @@
     "stylus": "^0.54.5"
   },
   "repository": {
-
     "type": "git",
-
-    "url": "git@github.com:braitsch/node-login.git"
-
+    "url": "git@github.com:PTYin/pinyin-learning.git"
   },
   "license": "ISC",
   "engines": {
