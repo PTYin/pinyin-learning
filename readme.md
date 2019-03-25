@@ -74,7 +74,6 @@ Github仓库: [github.com/PTYin/pinyin-learning](https://github.com/PTYin/pinyin
 * 前端
   * jQuery UI(jQuery官方UI库)
   * chart.js(绘制图表的插件)
-  * 哔哩哔哩iframe
 * 后端
   * express框架
   * body-parser(request body解析中间件; 用来解析post请求的body)
@@ -105,7 +104,7 @@ Github仓库: [github.com/PTYin/pinyin-learning](https://github.com/PTYin/pinyin
       * dictionary(4个词典JSON文件)
       * image
       * jquery-ui(定制jQuery UI)
-      * js(前段需要的js模块化)
+      * js(前端需要的js模块化)
         * controllers
           * homeController.js
           * loginController.js
