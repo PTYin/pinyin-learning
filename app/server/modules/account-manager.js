@@ -174,7 +174,7 @@ exports.generatePasswordKey = function(email, ipAddress, callback)
 	accounts.findOneAndUpdate({email:email}, {$set:{
 		ip : ipAddress,
 		passKey : passKey
-	}, $unset:{cookie:''}}, {returnOriginal : false}, function(e, o){
+	}}, {returnOriginal : false}, function(e, o){
 		if (o.value != null){
 			callback(null, o.value);
 		}	else{
