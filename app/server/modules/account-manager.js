@@ -207,6 +207,7 @@ exports.addNewAccount = function(newData, callback)
 						newData.pass = hash;
 					// append date stamp when record was created //
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+						newData.cookie = guid();
 						accounts.insertOne(newData, callback);
 					});
 				}
